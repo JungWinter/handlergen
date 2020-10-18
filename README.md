@@ -1,5 +1,7 @@
 # handlergen
 
+[![Actions Status](https://github.com/jungwinter/handlergen/workflows/ci/badge.svg)](https://github.com/jungwinter/handlergen/actions) ![Golang Badge](https://badgen.net/badge/Language/Go/cyan) ![GRPC Badge](https://badgen.net/badge/Use/gRPC/blue)
+
 Generate pre-defined golang grpc handlers with test suite from protobuf file.
 
 1. Generate snake cased handler files with test (`xxx_handler.go`, `xxx_handler_test.go`)
