@@ -2,7 +2,6 @@ package main
 
 import (
 	"bytes"
-	"io/ioutil"
 	"os"
 	"strings"
 	"testing"
@@ -144,9 +143,15 @@ func TestWrite(t *testing.T) {
 		err := write(&tpl, handlerTmplStr, h)
 
 		assert.NoError(t, err)
-		expected, err := ioutil.ReadFile("./testdata/sign_up_handler.go.out")
+
+		f, err := os.Open("testdata/sign_up_handler.go.out")
 		assert.NoError(t, err)
-		assert.Equal(t, string(expected), tpl.String())
+		var expected bytes.Buffer
+		_, err = expected.ReadFrom(f)
+		err = f.Close()
+		assert.NoError(t, err)
+
+		assert.Equal(t, expected.String(), tpl.String())
 	})
 	t.Run("handler test template", func(t *testing.T) {
 		h := handler{
@@ -159,8 +164,14 @@ func TestWrite(t *testing.T) {
 		err := write(&tpl, handlerTestTmplStr, h)
 
 		assert.NoError(t, err)
-		expected, err := ioutil.ReadFile("./testdata/sign_up_handler_test.go.out")
+
+		f, err := os.Open("testdata/sign_up_handler_test.go.out")
 		assert.NoError(t, err)
-		assert.Equal(t, string(expected), tpl.String())
+		var expected bytes.Buffer
+		_, err = expected.ReadFrom(f)
+		err = f.Close()
+		assert.NoError(t, err)
+
+		assert.Equal(t, expected.String(), tpl.String())
 	})
 }
