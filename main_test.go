@@ -144,7 +144,7 @@ func TestWrite(t *testing.T) {
 		err := write(&tpl, handlerTmplStr, h)
 
 		assert.NoError(t, err)
-		expected, err := ioutil.ReadFile("testdata/sign_up_handler.go.out")
+		expected, err := ioutil.ReadFile("./testdata/sign_up_handler.go.out")
 		assert.NoError(t, err)
 		assert.Equal(t, string(expected), tpl.String())
 	})
@@ -159,7 +159,7 @@ func TestWrite(t *testing.T) {
 		err := write(&tpl, handlerTestTmplStr, h)
 
 		assert.NoError(t, err)
-		expected, err := ioutil.ReadFile("testdata/sign_up_handler_test.go.out")
+		expected, err := ioutil.ReadFile("./testdata/sign_up_handler_test.go.out")
 		assert.NoError(t, err)
 		assert.Equal(t, string(expected), tpl.String())
 	})
