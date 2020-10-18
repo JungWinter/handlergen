@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package v1.sample;
+
+option go_package = "github.com/myorg/myproto/sample";
+
+service Sample {
+  rpc SignIn(SignInRequest) returns (SignInResponse) {}
+  rpc SignUp(SignUpRequest) returns (SignUpResponse) {}
+}
