@@ -1,0 +1,70 @@
+package handler
+
+import (
+	"context"
+	"database/sql"
+	"testing"
+	"time"
+
+	"bou.ke/monkey"
+	"github.com/DATA-DOG/go-sqlmock"
+	"github.com/golang/mock/gomock"
+	"github.com/stretchr/testify/suite"
+
+	"github.com/myorg/myproto/sample"
+)
+
+type SignUpHandlerTestSuite struct {
+	suite.Suite
+
+	db      *sql.DB
+	sqlMock sqlmock.Sqlmock
+
+	ctrl *gomock.Controller
+}
+
+func TestSignUpHandlerTestSuite(t *testing.T) {
+	suite.Run(t, new(SignUpHandlerTestSuite))
+}
+
+func (s *SignUpHandlerTestSuite) SetupSuite() {
+	monkey.Patch(time.Now, func() time.Time {
+		return time.Date(2020, 1, 1, 0, 0, 0, 0, time.UTC)
+	})
+}
+
+func (s *SignUpHandlerTestSuite) SetupTest() {
+	db, sqlMock, err := sqlmock.New()
+	s.NoError(err)
+
+	s.db = db
+	s.sqlMock = sqlMock
+
+	s.ctrl = gomock.NewController(s.T())
+}
+
+func (s *SignUpHandlerTestSuite) TearDownTest() {
+	s.sqlMock.ExpectClose()
+	err := s.db.Close()
+	if err != nil {
+		s.T().Log(err)
+	}
+
+	s.ctrl.Finish()
+}
+
+func (s *SignUpHandlerTestSuite) TearDownSuite() {
+	monkey.Unpatch(time.Now)
+}
+
+func (s *SignUpHandlerTestSuite) TestSignUp() {
+	s.Run("success", func() {
+		ctx := context.Background()
+		req := &sample.SignUpRequest{}
+
+		resp, err := SignUp()(ctx, req)
+
+		s.NoError(err)
+		s.Equal(&sample.SignUpResponse{}, resp)
+	})
+}

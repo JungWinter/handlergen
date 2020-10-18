@@ -1,0 +1,15 @@
+package handler
+
+import (
+	"context"
+
+	"github.com/myorg/myproto/sample"
+)
+
+type SignUpHandlerFunc func(ctx context.Context, req *sample.SignUpRequest) (*sample.SignUpResponse, error)
+
+func SignUp() SignUpHandlerFunc {
+	return func(ctx context.Context, req *sample.SignUpRequest) (*sample.SignUpResponse, error) {
+		return &sample.SignUpResponse{}, nil
+	}
+}
